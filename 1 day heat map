@@ -1,0 +1,33 @@
+library(ggplot2)
+library(reshape2)
+# The numbers below are for demonstration purposes only
+data_matrix <- matrix(c(
+  35637, 8858, 33331, 31380, 28666, 25495,
+  22444, 19283, 22341, 25883, 29571, 33153,	
+  36314, 38591, 43451, 40762, 37236, 33256,	
+  29156, 25007, 27221, 31794, 36434, 40934,	
+  44760, 47718, 51333, 47967, 43794, 38893,	
+  33820, 28817, 29746, 34925, 40233, 45538,	
+  49997, 53695
+), nrow = 6, byrow = TRUE)
+
+data_long <- melt(data_matrix)
+colnames(data_long) <- c("X", "Y", "Fluorescence")
+
+# Y-axis inversion for correct orientation
+data_long$Y <- max(data_long$Y) - data_long$Y + 1
+
+ggplot(data_long, aes(X, Y, fill = Fluorescence)) +
+  geom_tile(color = "black") +
+  scale_fill_gradient(
+    low = "#e5f5e0",
+    high = "#006d2c",
+    name = "Fluorescence"
+  ) +
+  coord_fixed() +
+  theme_minimal() +
+  labs(
+    title = "Fluorescence heatmap – well A3",
+    x = "Column",
+    y = "Row"
+  )
